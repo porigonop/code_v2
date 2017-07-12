@@ -2,7 +2,7 @@ import random
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, QPointF
 from Constante import THRUST, NB_ITERATION, WIDTH, HEIGHT, NB_SECTEUR
-from Helper import  distsq, mapjs
+from Helper import  distsq, mapjs, constrain
 class Rocket():
     """
     """
@@ -10,7 +10,7 @@ class Rocket():
      genes=[QPointF(random.randint(-1, 1), random.randint(-1, 1)) for _ in range(NB_ITERATION)],\
      mut=random.random() * 0.1):
         self.genes = genes
-        #self.genes = [QPointF(0, -1) for _ in range(NB_ITERATION)]
+        self.genes = [QPointF(0, -1) for _ in range(NB_ITERATION)]
 
         self.pos = pos
         self.initpos = self.pos
@@ -33,6 +33,8 @@ class Rocket():
         if not self.crashed and not self.goal:
             self.speed += self.genes[iteration] * THRUST
             self.pos += self.speed
+            self.pos.setX(constrain(self.pos.x(), 0, WIDTH))
+            self.pos.setY(constrain(self.pos.y(), 0, HEIGHT))
     def draw(self, qp, pen):
         """
         """
@@ -40,6 +42,7 @@ class Rocket():
         sec_y = mapjs(self.pos.y(), 0, HEIGHT, 0, NB_SECTEUR, 1)
         #print("rock : ", QColor(self.pos.x() * NB_SECTEUR/WIDTH, self.pos.y() * NB_SECTEUR/HEIGHT, 0))
         pen.setColor(QColor((sec_x %2) * 255, (sec_y %2) * 255, 0))
+        pen.setWidth(15)
         qp.setPen(pen)
         qp.drawPoint(self.pos)
 

@@ -25,6 +25,7 @@ class Fenetre(QWidget):
         qp.setPen(pen)
         self.pop.draw(qp, pen)
         qp.end()
+        
     def to_draw(self, obs, pop):
 
         self.sector = obs

@@ -15,7 +15,7 @@ class Population():
         self.iteration = 0
         self.target = Target(WIDTH / 2, HEIGHT / 8)
         for _ in range(NB_ROCKET):
-            self.rockets.append(Rocket(QPointF(WIDTH / 2 + 10, HEIGHT)))
+            self.rockets.append(Rocket(QPointF(WIDTH / 2 + 50, HEIGHT)))
     def move(self, secteur):
         for rocket in self.rockets:
             rocket.move(self.iteration, self.target, secteur)
@@ -29,10 +29,11 @@ class Population():
         self.target.draw(qp)
         for rocket in self.rockets:
             rocket.draw(qp, pen)
+        time.sleep(.1)
     def new_pop(self):
         """
         """
-        breedingpool = []
+
         score = []
         succed_rate = 0
         for elt in range(len(self.rockets)):
@@ -41,14 +42,29 @@ class Population():
                 succed_rate += 1.
         succed_rate /= NB_ROCKET
         print(str(succed_rate*100) + "%")
+
+
         max_score = max(score)
-        for elt in range(len(self.rockets)):
-            for _ in range(int(mapjs(score[elt], 0, max_score, 1, 100))):
-                breedingpool.append(self.rockets[elt])
+        sum_score = sum(score)
+
+        score = list(map(lambda x:x / sum_score, score))
+
         new_pop = []
         for _ in range(NB_ROCKET):
-            parenta = random.choice(breedingpool)
-            parentb = random.choice(breedingpool)
+            choice = random.random()
+            pos = -1
+            while choice >= 0.00001:
+                choice -= score[pos]
+                pos += 1
+            parenta = self.rockets[pos]
+
+            choice = random.random()
+            pos = -1
+            while choice >= 0.00001:
+                choice -= score[pos]
+                pos += 1
+            parentb = self.rockets[pos]
+
             new_pop.append(parenta.crossover(parentb))
         self.rockets = new_pop
         time.sleep(1)

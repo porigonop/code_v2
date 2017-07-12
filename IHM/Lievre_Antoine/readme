@@ -1,0 +1,15 @@
+Q1 :
+il ne faut pas oublier l'appelle a la fonction main dans le if __name__ == "__main__'
+
+Q2 :
+notre code ne comporte pas de QApplication
+il faut rajoute le exec_()
+
+Q4 : 
+on vait notreaction.triggered.connect(lafonction)
+
+Q6 : 
+je n'ai pas eu ce probleme
+
+TP 2 :
+Q1 : il faut utiliser un mousemoveevent()

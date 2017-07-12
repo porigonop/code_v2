@@ -1,0 +1,175 @@
+
+<html>
+
+<head>
+<title>Travaux Pratiques Qt #1</title>
+<meta http-equiv="content-type" content="text/html"; charset="utf-8"> 
+
+<style>
+body {
+  font-family: arial, helvetica, sans-serif; 
+  font-size: 10pt;
+}
+
+a:link    {color:steelblue;}
+a:visited {color:slategrey;}
+a:hover   {background-color:yellow;}
+
+em {
+  font-style: normal;
+  color: #ee5e19;  /* orange */
+}
+
+li {
+  margin-bottom: 5px;
+  padding-bottom: 0px;
+}
+
+h1 {
+  font-size: 20pt;
+  color: navy;
+  margin-top:15px;
+  margin-bottom:2px;
+}
+
+h2 {
+  font-size: 16pt;
+  color: #ee5e19;
+  margin-bottom:0px;
+  padding-bottom: 0px;
+}
+
+h3 {
+  font-size: 14pt;
+  margin-top: 30px;
+  margin-bottom:  0px;
+  padding-bottom: 0px;
+  color: navy;
+}
+
+</style>
+</head>
+
+Le TP s'appuie sur celui d'Eric Lecolinet
+
+<h2> Sujet </h2>
+
+<p>
+Note préliminaire : il est préférable de lire chaque "étape" en entier 
+(en particulier les notes ou remarques) avant de la traiter.
+</p>
+
+<h3>1e Etape: Démarrage</h3>
+<p> Créer un fichier mainWindow.py avec votre éditeur de texte préféré<p>
+<p> Créer une fonction <em>main(</em>args<em>)</em> qui sera appelé à partir du point d'entrée du programme (<em>if</em> __name__ == "__main__":)
+<p> Afficher une trace dans la fonction main, à l'aide de la fonction <em>print</em> et vérifier que le programme s'execute correctement dans la console (<em>python2</em> mainwindow.py).</p>
+<p> 
+<b>Q1: Que faut il ne pas oublier pour que le code s'execute?</b></p>
+<!-- Import sys -->
+
+
+<h3>2e Etape: Créer une classe <em>MainWindow</em></h3>
+<p>La classe <em>MainWindow</em> dérivera de <em>QMainWindow</em>. Ajouter une constructeur qui surcharge le constructeur de la classe mère QMainWindow, mais qui ne fait rien de plus pour le moment. Il faudra penser à rajouter <em>from PyQt5.QtWidgets import *</em></P>
+<p>créer un instance de <em>MainWindow</em> dans la fonction main et afficher la fenêtre avec la méthode <em>show()</em>.  Exécuter  maintenant le code.</p>
+<p><b>Q2: Pourquoi la fenêtre ne s'affiche pas? que faut il rajouter?</b></p>
+<!-- app = QApplication(args)
+	win = MainWindow()
+	win.show()
+	app.exec_()
+ --> 
+
+
+<h3>3e Etape: rajouter des widgets à MainWindow</h3>
+<p>
+Pour l'instant <em>MainWindow</em> ne fait pas grand chose de plus que QMainWindow.
+En s'inspirant du cours créer une barre de menu (à l'aide de la méthode <em>menuBar() </em> QMainWindow) avec un menu déroulant "Fichier" (à l'aide la méthode <em>addMenu() </em> de la classe QMenuBar) contenant des items pour activer les commandes
+"Open...", "Save..." et "Quit...". Créer également une barre d'outils 
+permettant d'activer les mêmes commandes. Utiliser les <em>QAction</em> 
+en spécifiant les accélérateurs clavier et bulles d'aides appropriés
+(on supposera que l'on dispose de 3 fichiers .png contenant les images des
+icones de ces commandes). Implémenter que quelques actions pour pouvoir avancer rapidement dans le TP.</p> 
+
+<p>Finalement, faire en sorte que la zone centrale de la MainWindow soit un 
+<em>QTextEdit</em> à l'aide de la méthode <em>setCentralWidget()</em>
+</p>
+
+<p>Option: Créer une barre de status en appelant la méthode <em>statusBar()</em> de la classe <em>QMainWindow</em>.</p>
+
+
+
+
+<h3>4e Etape: définir et connecter les slots</h3>
+<p>
+Déclarer et implémenter les slots <em>openFile</em>(), <em>saveFile</em>() 
+et <em>quitApp</em>().
+Pour l'instant ils se contenteront d'afficher un message (e.g. le nom du slot)
+sur la console. Connecter les slots aux actions correspondantes. Tester.
+</p>
+
+<b>Q4: Comment connecter les actions aux slots ?</b></p>
+<!-- newAct.triggered.connect( self.open ) --> 
+
+
+
+<h3>5e Etape: ouvrir une boîte de dialogue pour sélectionner un fichier</h3>
+<p>
+On va maintenant faire en sorte que les slots <em>openFile</em>() 
+et <em>saveFile</em>() ouvrent des boîtes de dialogue permettant de récupérer
+un nom de fichier. C'est le rôle du widget <em>QFileDialog</em>, qui peut
+être utilisé de plusieurs manières. En s'inspirant du cours, choisir la technique
+la plus simple, tant pour ouvrir un "Open" qu'un "Save" Dialog.
+Recupérer le nom du fichier sélectionné et l'afficher sur la console.
+</p>
+
+
+<h3>6e Etape: ouvrir / sauver une page HTML</h3>
+<p>
+On va maintenant rajouter le code nécessaire dans le slot <em>openFile</em>() 
+pour lire le fichier (texte ou HTML) sélectionné via la boîte de dialogue
+et faire apparaître son contenu dans le <em>QTextEdit</em>.
+Pour ce faire, on utilisera un <em>QFile</em> et un <em>QTextStream</em> pour
+lire le fichier. Pour simplifier tout le contenu du fichier sera lu en une seule 
+fois dans le QTextStream. Ce contenu sera alors affecté au <em>QTextEdit</em>
+via sa méthode <em>setHtml()</em>(). Cette méthode suppose que le contenu est du HTML
+(pour du texte brut on utiliserait plutot setPlainText()).
+</p>
+<p>
+Inversement, en suivant la même logique, faire en sorte que le slot <em>saveFile</em>() 
+sauvegarde le contenu du <em>QTextEdit</em> dans le fichier indiqué par la
+boîte de dialogue.</p>
+
+<b>Q6: Le code ne s'execute pas correctement car vous n'avez pas acces au textEdit depuis la méthode <em>open</em> ou <em>save</em>. Comment résoudre ce problème?</b> </p>
+<!-- mettre le texte edit en variable de classe --> 
+
+
+
+
+<h3>7e Etape: ouvrir une boîte de dialogue pour demander confirmation</h3>
+<p>
+Faire en sorte qu'appuyer sur le bouton <em>Quit</em> ait pour effet d'ouvrir 
+un <em>QMessageBox</em> comportant des boutons "Yes" et "No" 
+permettant de demander confirmation avant de sortir de l'application.
+</p>
+
+
+
+<h3>8e Etape: demander confirmation dans tous les cas</h3>
+<p>
+L'étape précédente comporte une faille. En effet, l'utilisateur peut aussi
+quitter le programme en cliquant sur le bouton présent sur la
+barre de la fenêtre (généralement une croix, ou un bouton rouge).
+Modifier la <em>MainWindow</em> de telle sorte que cette action ait le même effet 
+que lorsqu'on clique sur le bouton <em>Quit</em>, c'est-à-dire ouvrir une boîte
+de dialogue pour demander confirmation.
+(Indication : il faudra redéfinir <em>QWidget::closeEvent</em>() et ignorer l'évenement).
+</p>
+
+
+
+<br>
+
+<!--#INCLUDE virtual="../templates/footer.html"-->
+
+</body>
+</html>
+

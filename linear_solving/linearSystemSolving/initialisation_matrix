@@ -1,0 +1,15 @@
+matrixLeft = []
+
+numberLine = int(input("Nombre de ligne?"))
+numberColumn = int(input("Nombre de colonne"))
+
+for line in range(numberLine):
+    lineMatrix = []
+    for column in range(numberColumn):        
+        print("Ajout element: [", line, column,"]")
+        elmt = int(input(""))
+        lineMatrix.append(elmt)                    
+    matrixLeft.append(lineMatrix)
+
+print(matrixLeft)
+

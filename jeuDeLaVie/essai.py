@@ -71,12 +71,14 @@ chargement assigné a cette fonction, differente de celle du timer
     global vivante
     global nb_gene
     global pourcent
+    global LabelGenen #nombre de generation, affiché en haut a gauche
     nb_gene += nb
     b = nb // 100
     for i in range(nb):
         vivante = recalculer_grille()
         pourcent = i+b
         fenetre.repaint()
+    labelGene.setText(str(nb_gene))
     pourcent = 0
     fenetre.repaint()
 
@@ -285,18 +287,25 @@ compte le nombre de voisin a la position x, y
     """
     voisin = 0
     for k in range(-1,2):
-        if y+k >= 0 and y+k < len(vivante):
-            for l in range(-1,2):
-                if l == k and k == 0:
-                    pass
-                else:
-                    if x + l >= 0  and x+l < len(vivante[1]):
-                        if vivante[y+k][x+l]:
-                            voisin += 1
-                        else:
-                            pass
-        else:
-            pass
+      for l in range(-1,2):
+        if not (l == k and k == 0):
+#
+#  ...
+#  . .
+#  ...
+#
+              check_y = y + k
+              check_x = x + l
+              if (check_x < 0):
+                check_x = len(vivante[0]) - 1
+              if (check_y < 0):
+                check_y = len(vivante) - 1
+              if (check_x >= len(vivante[0])):
+                check_x = 0
+              if (check_y >= len(vivante)):
+                check_y = 0
+              if vivante[check_y][check_x]:
+                    voisin += 1
     return voisin
 #--------etat suivant au position x, y-------#
 def etat_suivant(x, y):

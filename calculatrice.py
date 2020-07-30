@@ -37,14 +37,13 @@ class Visitor:
         pass
     def visit_operation(self, operation):
         operation.left_elt.accept(self)
-        operation.operation.accept(self)
+        operation.operator.accept(self)
         operation.right_elt.accept(self)
 
 class Calcul(Visitor):
     memory = 0
     operator = ''
     def visit_element(self, element):
-        print(element.element, self.memory, self.operator)
         if self.operator == '':
             self.memory = element.element
         else:
@@ -144,3 +143,13 @@ def test_parser():
     print()
 
 test_parser()
+
+
+while True:
+    _in = input('string to calculate:')
+    ast = Parser(Lexer(_in)).parse()
+    ast.accept(PrettyPrint())
+    calc = Calcul()
+    ast.accept(calc)
+    print(' = ', end='')
+    calc.print_result()

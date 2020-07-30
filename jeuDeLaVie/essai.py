@@ -8,8 +8,9 @@ from time import *
 TAILLE_X = 300
 TAILLE_Y = 300
 vivante = []
+
 # Chargement des bibliothèques Qt5
-from PyQt5.QtCore import QTimer, pyqtSlot, QPoint
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QGridLayout, QDialog, QInputDialog, QLabel
 from PyQt5.QtGui import QPainter, QColor, QPen
 from PyQt5.QtCore import QRect

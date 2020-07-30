@@ -16,7 +16,7 @@ class Operation:
     def __init__(self, left_elt, right_elt, operator):
         self.left_elt = left_elt
         self.right_elt = right_elt
-        self.operation = operator
+        self.operator = operator
     def accept(self, visitor):
         visitor.visit(self)
 
@@ -36,9 +36,9 @@ class Visitor:
     def visit_operator(self, operator):
         pass
     def visit_operation(self, operation):
-        self.visit(operation.left_elt)
-        self.visit(operation.operation)
-        self.visit(operation.right_elt)
+        operation.left_elt.accept(self)
+        operation.operation.accept(self)
+        operation.right_elt.accept(self)
 
 class Calcul(Visitor):
     memory = 0
@@ -58,6 +58,21 @@ class Calcul(Visitor):
     def print_result(self):
         print(self.memory)
 
+class PrettyPrint(Visitor):
+    def visit_element(self, element):
+        print(element.element, end = '')
+    def visit_operator(self, operator):
+        print(operator.operator, end = '')
+    def visit_operation(self, operation):
+        print('(', end='')
+        operation.left_elt.accept(self)
+        print(' ', end='')
+        operation.operator.accept(self)
+        print(' ', end='')
+        operation.right_elt.accept(self)
+        print(')', end='')
+
+
 
 class Token:
     operator = False
@@ -70,6 +85,7 @@ class Token:
             self.empty = True
         else:
             self.token = int(self.token)
+
 
 class Lexer:
     def __init__(self, stream):
@@ -85,6 +101,28 @@ class Lexer:
         self.stream = self.stream[next_space + 1:]
         return Token(token)
 
+
+class Parser:
+    left_operator = None
+
+    def __init__(self, token_stream):
+        self.token_stream = token_stream
+    def parse(self, ast = None):
+        if ast is None:
+            first_token = self.token_stream.get_token()
+            if not first_token.operator:
+                ast = Element(first_token.token)
+            else:
+                raise Exception('{} is not a number', first_token.token)
+        operator = self.token_stream.get_token()
+        if operator.empty:
+            return ast
+        if operator.operator:
+            return self.parse_operator(ast, operator)
+    def parse_operator(self, left_ast, operator):
+        right_token = self.token_stream.get_token()
+        return self.parse(Operation(left_ast, Element(right_token.token), Operator(operator.token)))
+
 def test_ast():
     calcul_visitor = Calcul()
     op = Operation(Element(7), Element(3), Operator('+'))
@@ -99,4 +137,10 @@ def test_lexer():
         print(token.token)
         token = lexer.get_token()
 
-test_lexer()
+def test_parser():
+    parser = Parser(Lexer('1 + 2 + 3'))
+    ast = parser.parse()
+    ast.accept(PrettyPrint())
+    print()
+
+test_parser()

@@ -3,13 +3,13 @@ import sys
 from random import *
 from pprint import *
 from time import *
-# le code n'est pas le plus beau possible, je l'ai écris vite pour aller
+# le code n'est pas le plus beau possible, je l'ai ecris vite pour aller
 #le plus loin possible.
 TAILLE_X = 300
 TAILLE_Y = 300
 vivante = []
 
-# Chargement des bibliothèques Qt5
+# Chargement des bibliotheques Qt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QGridLayout, QDialog, QInputDialog, QLabel
 from PyQt5.QtGui import QPainter, QColor, QPen
@@ -29,11 +29,11 @@ pinceau = 0 #pinceau utiliser, rouge ou blanc
 @pyqtSlot()
 def suivant():
     """
-fait acancer d'une génération
+fait acancer d'une generation
     """
     global vivante
     global nb_gene
-    global LabelGenen #nombre de generation, affiché en haut a gauche
+    global LabelGenen #nombre de generation, affiche en haut a gauche
     nb_gene += 1
     vivante = recalculer_grille()
     labelGene.setText(str(nb_gene))
@@ -50,7 +50,7 @@ et lancer la bar de chargement
 @pyqtSlot()
 def stop():
     """
-arréte le timer et la bar de chargement
+arrete le timer et la bar de chargement
     """
     global charg
     charg = False
@@ -59,20 +59,20 @@ arréte le timer et la bar de chargement
 @pyqtSlot()
 def quitter():
     """
-quitter le programe et donne en console le nombre de génération passé
+quitter le programe et donne en console le nombre de generation passe
     """
     print("nombre de generation : ", nb_gene)
     exit()
 @pyqtSlot()
 def avance(nb):
     """
-avance d'un nombre nb de génération tout en augmentant la bar de 
-chargement assigné a cette fonction, differente de celle du timer
+avance d'un nombre nb de generation tout en augmentant la bar de 
+chargement assigne a cette fonction, differente de celle du timer
     """
     global vivante
     global nb_gene
     global pourcent
-    global LabelGenen #nombre de generation, affiché en haut a gauche
+    global LabelGenen #nombre de generation, affiche en haut a gauche
     nb_gene += nb
     b = nb // 100
     for i in range(nb):
@@ -116,7 +116,7 @@ bar de chargement de avance
     
 def chargwin(qp):
     """
-bar de chargement du timer, glitch legerement à la fin
+bar de chargement du timer, glitch legerement a la fin
     """
     if charg:
         noir = QColor(0,0,0)
@@ -126,22 +126,23 @@ bar de chargement du timer, glitch legerement à la fin
         global positionA
         global positionB
         global taille
-        if positionA == 100:
+        if positionA == 110:
             positionA = 0
+            taille = 0
         positionA += 1
         if positionA <= 10:
             taille += 1
-            qp.fillRect(QRect(300, 20, taille, 10), noir)
-        elif positionA > 90:
+            qp.fillRect(QRect(300 + positionA - taille, 20, taille, 10), noir)
+        elif positionA > 100:
             taille -= 1
-            qp.fillRect(QRect(300 + positionA-taille, 20, taille, 10), noir)
+            qp.fillRect(QRect(300 + 100 - taille, 20, taille, 10), noir)
         else:
             qp.fillRect(QRect(300 + positionA-taille, 20, taille, 10), noir)
             
 
 def dessiner_grille(qp):
     """
-dessine la grille de l’automate cellulaire sur le QPainter qp
+dessine la grille de l'automate cellulaire sur le QPainter qp
     """
     dx = 100
     dy = 100
@@ -164,12 +165,12 @@ dessine la grille de l’automate cellulaire sur le QPainter qp
 
 class FenetreDessin(QWidget):
     """
-    Notre classe fenêtre qui permettra d’afficher l’état de l’automate
+    Notre classe fenetre qui permettra d'afficher l'etat de l'automate
     cellulaire
     """
     def mousePressEvent(self, QMouseEvent):
         """
-permet de savoir quand l'utilisateur appui sur la souris à une position
+permet de savoir quand l'utilisateur appui sur la souris a une position
         """
         x, y = QMouseEvent.x()-105, QMouseEvent.y()-105
         x1 = ( x // 5 )
@@ -203,12 +204,12 @@ enregistre le deplacement de la souris.
         fenetre.repaint()
     def mouseReleaseEvent(self, QMouseEvent):
         """
-quand on arrète d'appuyer sur la souris
+quand on arrete d'appuyer sur la souris
         """
         fenetre.setMouseTracking(False)
     def paintEvent(self, event):
         """
-paintEvent est appelée chaque fois qu’il faut redessiner la fenêtre
+paintEvent est appelee chaque fois qu'il faut redessiner la fenetre
         """
         qp = QPainter(self)
         dessiner_grille(qp)
@@ -218,7 +219,7 @@ paintEvent est appelée chaque fois qu’il faut redessiner la fenêtre
 #-----------decoder les lignes----------#
 def decodage_ligne(ligne):
     """
-décode une ligne de caractére type str
+decode une ligne de caractere type str
     """
     tab = []
     for elt in ligne:
@@ -237,7 +238,7 @@ décode une ligne de caractére type str
 #------------decoder un fichier----------#
 def initialiser_depuis_fichier(fichier):
     """
-initialise depuis une chaine de caractére qui est un fichier
+initialise depuis une chaine de caractere qui est un fichier
     """
     fi = open(fichier)
     fic = []
@@ -323,7 +324,7 @@ renvoie True ou False de la cellule a la position x, y
 #--------------------changer de generation------------#
 def recalculer_grille():
     """
-recalcul la grille entiére vivante
+recalcul la grille entiere vivante
     """
     tab = []
     for i in range(0,len(vivante)):
@@ -334,10 +335,10 @@ recalcul la grille entiére vivante
     return tab
 
 
-#--créé un fichier de caractere aléatoire pour le jeu de la vie --#
+#--cree un fichier de caractere aleatoire pour le jeu de la vie --#
 def creefic(nom):
     """
-crée un fichier de 100*100 nommer nom avec des . et des * aléatoirement
+cree un fichier de 100*100 nommer nom avec des . et des * aleatoirement
     """
     liste = ['.','*']
     fic = open(nom,"w")
@@ -347,7 +348,7 @@ crée un fichier de 100*100 nommer nom avec des . et des * aléatoirement
         fic.write('\n')
         
 if __name__ == "__main__":
-    creefic("aleatoire")#crée un fichier aléatoire si on veux l'utiliser
+    creefic("aleatoire")#cree un fichier aleatoire si on veux l'utiliser
     if sys.argv[1] !="__vide__":
         vivante = initialiser_depuis_fichier(sys.argv[1])
     else:

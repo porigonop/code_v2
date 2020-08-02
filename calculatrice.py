@@ -1,24 +1,24 @@
-class Element:
+
+class Visitable:
+    def accept(self, visitor):
+        visitor.visit(self)
+
+
+class Element(Visitable):
     def __init__(self, element):
         self.element = element
-    def accept(self, visitor):
-        visitor.visit(self)
 
 
-class Operator:
+class Operator(Visitable):
     def __init__(self, operator):
         self.operator = operator
-    def accept(self, visitor):
-        visitor.visit(self)
 
 
-class Operation:
+class Operation(Visitable):
     def __init__(self, left_elt, right_elt, operator):
         self.left_elt = left_elt
         self.right_elt = right_elt
         self.operator = operator
-    def accept(self, visitor):
-        visitor.visit(self)
 
 
 class Visitor:
@@ -31,6 +31,7 @@ class Visitor:
             self.visit_operator(_object)
         if isinstance(_object, Operation):
             self.visit_operation(_object)
+
     def visit_element(self, element):
         pass
     def visit_operator(self, operator):
@@ -40,15 +41,23 @@ class Visitor:
         operation.operator.accept(self)
         operation.right_elt.accept(self)
 
+
 class Calcul(Visitor):
     memory = 0
     operator = ''
     def visit_element(self, element):
+        """
+        1 + 3 : Operation(Elt(1) Op(+) Elt(2))
+        """
         if self.operator == '':
             self.memory = element.element
         else:
             if self.operator == '+':
                 self.memory += element.element
+            if self.operator == '-':
+                self.memory -= element.element
+            if self.operator == '*':
+                self.memory *= element.element
 
 
     def visit_operator(self, operator):
@@ -80,6 +89,10 @@ class Token:
         self.token = token
         if token == '+':
             self.operator = True
+        elif token == '-':
+            self.operator = True
+        elif token == '*':
+            self.operator = True
         elif token == '':
             self.empty = True
         else:
@@ -102,25 +115,28 @@ class Lexer:
 
 
 class Parser:
-    left_operator = None
-
     def __init__(self, token_stream):
         self.token_stream = token_stream
+
     def parse(self, ast = None):
         if ast is None:
             first_token = self.token_stream.get_token()
-            if not first_token.operator:
-                ast = Element(first_token.token)
-            else:
-                raise Exception('{} is not a number', first_token.token)
+            ast = Element(first_token.token)
         operator = self.token_stream.get_token()
         if operator.empty:
             return ast
         if operator.operator:
             return self.parse_operator(ast, operator)
+
     def parse_operator(self, left_ast, operator):
         right_token = self.token_stream.get_token()
-        return self.parse(Operation(left_ast, Element(right_token.token), Operator(operator.token)))
+        return self.parse(
+                Operation(
+                    left_ast,
+                    Element(right_token.token),
+                    Operator(operator.token)
+                    )
+                )
 
 def test_ast():
     calcul_visitor = Calcul()
@@ -129,7 +145,7 @@ def test_ast():
     calcul_visitor.print_result()
 
 def test_lexer():
-    string = '1 + 3 + 4 + 5 + 1 + 0'
+    string = '1 + 3 + 4 + 50 + 1 + 0'
     lexer = Lexer(string)
     token = lexer.get_token()
     while (not token.empty):
@@ -141,9 +157,6 @@ def test_parser():
     ast = parser.parse()
     ast.accept(PrettyPrint())
     print()
-
-test_parser()
-
 
 while True:
     _in = input('string to calculate:')

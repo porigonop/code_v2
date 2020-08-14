@@ -15,8 +15,13 @@ class GUI:
         ]
         self.window.layout(layout)
         self.window.finalize()
+    def start(self):
+        while True:
+            self.window.read()
 
 
 
 if __name__ == '__main__':
+    print('created gui')
     gui = GUI()
+    gui.start()

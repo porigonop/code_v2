@@ -1,5 +1,5 @@
 import time
-RANGE = 100000000
+RANGE = 10000000
 
 """
 def crible(range_):
@@ -63,13 +63,17 @@ print(time.time()-t_0)
 """
 t_0 = time.time()
 for i in range(RANGE):
-    if True | False:
+    if True or False:
         pass
 print(time.time()-t_0)
 
 t_0 = time.time()
-for i in range(RANGE):
+i = 0
+while i < RANGE:
     if True or False:
         pass
+    i += 1
 print(time.time()-t_0)
+
+
 

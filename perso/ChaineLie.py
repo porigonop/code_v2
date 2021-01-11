@@ -7,7 +7,7 @@ class Item:
     def __init__(self, item = None, next = None):
         self.item = item
         self.next = next
-        
+
     def __repr__(self):
         answer = "[" + str(self.item) + ", "
         current = self.next
@@ -16,38 +16,37 @@ class Item:
             current = current.next
             if current == None:
                 break
-              
         return answer[:-2] + "]"
-    
+
 class Liste:
-    
+
     def __init__(self):
         self.initial = Item()
-        
+
     def append(self, element):
         current = self.initial
         while True:
-            
+
             if current.next == None:
                 current.next = Item(element, None)
                 break
             current = current.next
-            
+
         self.rev = Item(element, self.rev)
-        
+
     def pop(self, position):
-        
+
         poping = self[postion]
-        
-        #ne l'enléve pas !
-        
+
+        #ne l'enleve pas !
+
         return poping
-    
+
     def remove(self, position):
         pass
-        
-        
-        
+
+
+
     def __getitem__(self, position):
         if len(liste) < position:
             raise IndexError("Sequence out of range")
@@ -61,67 +60,56 @@ class Liste:
         return current.item
 
     def __setitem__(self, position, value):
-    
+
         if len(liste) < position:
             raise IndexError("Sequence out of range")
-            
         if position < 0:
-        
             position = - position
-            
             current = self.rev
-            for i in range(position - 1):
-                current = current.next
-            current.item = value
-            
             other_current = self.initial
-            lenght = len(self)
-            for i in range(lenght - position):
-                other_current = other_current.next
-            
-            other_current.item = value
-            
-            
         else:
-        
             current = self.initial
-            for i in range(position - 1):
-                current = current.next
-            current.item = value
-            
-            
             other_current = self.rev
-            lenght = len(self)
-            for i in range(lenght - position):
-                other_current = other_current.next
-            other_current.item = value
-            
-     
+
+        for i in range(position - 1):
+            current = current.next
+        current.item = value
+        lenght = len(self)
+
+        for i in range(lenght - position):
+            other_current = other_current.next
+        other_current.item = value
+
+
     def __len__(self):
-    
         count = 0
         current = self.initial
-        
         while True:
             if current == None:
                 return count
             count += 1
             current = current.next
-    
+
+    def recurs_reverse(self, item_input):
+        if item_input.next = None:
+            return Item(item_input.element, None)
+        item = self.recurs_reverse(item_input.next)
+        item.next = Item(item.element, None)
+        return item
+
     def reverse(self):
-        #à changer
-        return self.rev
-        
+        return self.recurs_reverse(self.initial)
+
     def __repr__(self):
         return str(self.initial)
-        
-        
-        
+
+
+
 if __name__ == "__main__":
     liste = Liste(1,3,2)
     print(liste)
     print(liste.reverse())
-    
+
     print(len(liste))
     liste.append(-1)
     liste.append("salut")
@@ -133,4 +121,4 @@ if __name__ == "__main__":
     print(liste)
     print(liste.reverse())
 
-    
+

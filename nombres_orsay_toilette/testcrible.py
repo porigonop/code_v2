@@ -1,6 +1,6 @@
 from math import sqrt
 import time
-nb = 10000000
+nb = 10000
 
 def crible(nb):
     nb_sqrt = int(sqrt(nb)) + 1 
@@ -27,6 +27,24 @@ def crible(nb):
 t_0 = time.time()
 prem = crible(nb)
 nb_prem =[i for i, is_valid in enumerate(prem) if is_valid]
+t_1 = time.time()
+print(t_1 - t_0)
+print(len(nb_prem))
+#print(nb_prem)
+
+import sys
+sys.setrecursionlimit(nb*2)
+def nats(n):
+    yield  n
+    yield from nats(n + 1)
+def generator_crible(max_, n=nats(2)):
+    nb = next(n)
+    if nb > max_:
+        return
+    yield nb
+    yield from generator_crible(max_, (i for i in n if i % nb))
+t_0 = time.time()
+nb_prem =[prem for prime in generator_crible(nb)]
 t_1 = time.time()
 print(t_1 - t_0)
 print(len(nb_prem))
